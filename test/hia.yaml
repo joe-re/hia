@@ -1,0 +1,10 @@
+---
+
+test:view:
+  templates:
+    - fixtures/templates/view/test.js
+  script:
+    fixtures/script/view.js
+  baseDir:
+    src/view
+
