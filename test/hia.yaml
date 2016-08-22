@@ -1,6 +1,6 @@
 ---
 
-baseDir: ./test
+basedir: ./test
 commands:
   test:view:
     templates:
@@ -8,6 +8,6 @@ commands:
     script:
       fixtures/scripts/test.js
     output:
-      dir: src/view
+      dir: test/dist
       filename: '[name].jsx'
 

@@ -10,7 +10,7 @@ describe('executeScript', () => {
 
   it('receives exchanged options by script', () => {
     const result = executeScript(config, 'test:view', 'Test');
-    assert.equal(result.output.dir, 'src/view/exchanged');
+    assert.equal(result.output.dir, 'test/dist/exchanged');
     assert.equal(result.args.name, 'TestExchanged');
   });
 });
