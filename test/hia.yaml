@@ -2,9 +2,10 @@
 
 test:view:
   templates:
-    - fixtures/templates/view/test.js
+    - fixtures/component.ejs
   script:
-    fixtures/script/view.js
-  baseDir:
-    src/view
+    fixtures/script/test.js
+  output:
+    dir: src/view
+    filename: '[name].jsx'
 

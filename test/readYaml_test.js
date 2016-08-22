@@ -1,7 +1,7 @@
 const assert = require('power-assert');
-const { readYAML } = require('../index.js');
+const readYAML = require('../src/readYaml.js');
 
-describe('.readYAML', () => {
+describe('readYAML', () => {
   describe('exist target', () => {
     it('can read yaml file', () => {
       const json = readYAML('test/hia.yaml');
@@ -18,4 +18,3 @@ describe('.readYAML', () => {
     });
   });
 });
-
