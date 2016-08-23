@@ -10,4 +10,19 @@ commands:
     output:
       dir: test/dist
       filename: '[name].jsx'
-
+    args:
+      feature_name:
+        aliase: f
+        describe: Feature name. It is used as second directory name.(If you specify calendar, create 'test/dist/calendar/[name].jsx')
+      require_args:
+        aliase: r
+        describe: require args.
+        required: true
+      question_args:
+        aliase: q
+        describe: question args.
+        question: true
+      default_args:
+        aliase: d
+        describe: set default value.
+        default: 'default value'
