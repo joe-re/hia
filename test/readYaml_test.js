@@ -5,7 +5,7 @@ describe('readYAML', () => {
   describe('exist target', () => {
     it('can read yaml file', () => {
       const json = readYAML('test/hia.yaml');
-      assert(json.commands['test:view']);
+      assert(json.subcommands['test:view']);
     });
   });
 

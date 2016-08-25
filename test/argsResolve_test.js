@@ -5,14 +5,14 @@ const args = {};
 const params = {
   question_args: {
     aliase: 'q',
-    describe: 'question args.',
+    description: 'question args.',
     question: true
   }
 };
 describe('argsResolve', () => {
   describe('test', () => {
     it('test', () => {
-      argsResolve(args, params);
+      argsResolve('./', args, params);
     });
   });
 });

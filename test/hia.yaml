@@ -1,8 +1,11 @@
 ---
 
 basedir: ./test
-commands:
+command: hia
+subcommands:
   test:view:
+    description: generate view template.
+    input: true
     templates:
       - fixtures/component.ejs
     script:
