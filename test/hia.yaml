@@ -13,16 +13,17 @@ commands:
     args:
       feature_name:
         aliase: f
-        describe: Feature name. It is used as second directory name.(If you specify calendar, create 'test/dist/calendar/[name].jsx')
+        description: Feature name. It is used as second directory name.(If you specify calendar, create 'test/dist/calendar/[name].jsx')
       require_args:
         aliase: r
-        describe: require args.
+        description: require args.
         required: true
       question_args:
         aliase: q
-        describe: question args.
+        description: This is Question Section.
+        before: fixtures/scripts/before.js
         question: true
       default_args:
         aliase: d
-        describe: set default value.
+        description: set default value.
         default: 'default value'
