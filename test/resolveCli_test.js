@@ -19,45 +19,79 @@ describe('resolveCli', () => {
     });
   });
 
-  describe('execute with -h option', () => {
-    before(() => {
-      mockMeow = {
-        input: [ 'test:view', 'input' ],
-        flags: { h: true },
-        showHelp: sinon.stub()
-      };
+  describe('show help', () => {
+    describe('execute with -h option', () => {
+      before(() => {
+        mockMeow = {
+          input: [ 'test:view', 'input' ],
+          flags: { h: true },
+          showHelp: sinon.stub()
+        };
+      });
+      it('shows help', () => {
+        resolveCli(config);
+        assert(mockMeow.showHelp.calledOnce);
+      });
     });
-    it('shows help', () => {
-      resolveCli(config);
-      assert(mockMeow.showHelp.calledOnce);
+
+    describe('execute with wrong subcommand', () => {
+      before(() => {
+        mockMeow = {
+          input: [ 'wrooooong', 'input' ],
+          flags: { },
+          showHelp: sinon.stub()
+        };
+      });
+      it('shows help', () => {
+        resolveCli(config);
+        assert(mockMeow.showHelp.calledOnce);
+      });
+    });
+
+    describe('execute with correct subcommand', () => {
+      before(() => {
+        mockMeow = {
+          input: [ 'test:view', 'input' ],
+          flags: { },
+          showHelp: sinon.stub()
+        };
+      });
+      it("doesn't shows help", () => {
+        resolveCli(config);
+        assert.equal(mockMeow.showHelp.callCount, 0);
+      });
     });
   });
 
-  describe('execute with wrong subcommand', () => {
-    before(() => {
-      mockMeow = {
-        input: [ 'wrooooong', 'input' ],
-        flags: { },
-        showHelp: sinon.stub()
-      };
+  describe('convert to cli params', () => {
+    describe('resolve arg name', () => {
+      before(() => {
+        mockMeow = {
+          input: [ 'test:view', 'input' ],
+          flags: { feature_name: 'calendar' }
+        };
+      });
+      it('receives converted parameters', () => {
+        const resolved = resolveCli(config);
+        assert.equal(resolved.subcommand, 'test:view');
+        assert.equal(resolved.input, 'input');
+        assert.equal(resolved.args.feature_name, 'calendar');
+      });
     });
-    it('shows help', () => {
-      resolveCli(config);
-      assert(mockMeow.showHelp.calledOnce);
-    });
-  });
 
-  describe('execute with correct subcommand', () => {
-    before(() => {
-      mockMeow = {
-        input: [ 'test:view', 'input' ],
-        flags: { },
-        showHelp: sinon.stub()
-      };
-    });
-    it("doesn't shows help", () => {
-      resolveCli(config);
-      assert.equal(mockMeow.showHelp.callCount, 0);
+    describe('resolve aliase', () => {
+      before(() => {
+        mockMeow = {
+          input: [ 'test:view', 'input' ],
+          flags: { f: 'calendar' }
+        };
+      });
+      it('receives converted parameters', () => {
+        const resolved = resolveCli(config);
+        assert.equal(resolved.subcommand, 'test:view');
+        assert.equal(resolved.input, 'input');
+        assert.equal(resolved.args.feature_name, 'calendar');
+      });
     });
   });
 });

@@ -25,7 +25,7 @@ function toTable(command, subcommands) {
     Object.keys(subcommand.args).forEach(argName => {
       p.push(createArgRow(argName, subcommand.args[argName]));
     });
-    p.push([]); // empty line for separate bwtween subcommands
+    p.push([]); // empty line to separate bwtween subcommands
     return p;
   }, [
     [ 'Usage:' ],
@@ -58,10 +58,19 @@ function needToShowHelp(config, m) {
   return m.flags.h || m.flags.help || !(Object.keys(config.subcommands).indexOf(m.input[0]) >= 0);
 }
 
-function toCliParams(m) {
-  return {
-    subcommand: m.input[0]
-  };
+function toCliParams(config, m) {
+  const subcommandConfig = config.subcommands[m.input[0]];
+  const args = Object.keys(subcommandConfig.args).reduce((p, argName) => {
+    const argParams = subcommandConfig.args[argName];
+    const argValue = m.flags[argName] || m.flags[argParams.aliase] || null;
+    p[argName] = argValue;
+    return p;
+  }, {});
+  const resolved = { subcommand: m.input[0], args };
+  if (subcommandConfig.input) {
+    resolved.input = m.input[1];
+  }
+  return resolved;
 }
 
 function resolveCli(config) {
@@ -70,7 +79,7 @@ function resolveCli(config) {
     m.showHelp();
     return;
   }
-  return toCliParams(m);
+  return toCliParams(config, m);
 }
 
 module.exports = resolveCli;
