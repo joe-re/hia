@@ -51,11 +51,20 @@ function createUsage(command, subcommands) {
   return toStr(list);
 }
 
-function cli(settings) {
-  const m = meow(createUsage(settings.command, settings.subcommands));
-  console.log(m.input);
-  console.log(m.flags);
-  m.showHelp();
+function needToShowHelp(config, m) {
+  if (!m.input) {
+    return true;
+  }
+  return m.flags.h || m.flags.help || !(Object.keys(config.subcommands).indexOf(m.input[0]) >= 0);
+}
+
+function cli(config) {
+  const m = meow(createUsage(config.command, config.subcommands));
+  if (needToShowHelp(config, m)) {
+    m.showHelp();
+    return;
+  }
+  return m;
 }
 
 module.exports = cli;
