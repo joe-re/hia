@@ -30,3 +30,20 @@ subcommands:
         aliase: d
         description: set default value.
         default: 'default value'
+  test:store:
+    description: generate store.
+    templates:
+      - fixtures/store.ejs
+    script:
+      fixtures/scripts/test.js
+    output:
+      dir: test/dist
+      filename: '[name].jsx'
+    args:
+      feature_name:
+        aliase: f
+        description: Feature name. It is used as second directory name.(If you specify calendar, create 'test/dist/calendar/[name].jsx')
+      looooooooooooooooooooooooooooooooooooooooooong_args:
+        aliase: l
+        description: diaplay long args for test.
+        required: true

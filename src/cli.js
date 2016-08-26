@@ -12,26 +12,50 @@ function createCommandStr(command, subcommand, requireInput) {
   return `${command || ''} ${subcommand || ''} ${requireInput ? '<INPUT>' : ''}`;
 }
 
-function createUsageLite(command, subcommands) {
-  console.log(process.pkg);
-  const descPos =
-    Math.max(
-      ...Object.keys(subcommands).map(v => createCommandStr(command, v, subcommands[v].input)).map(v => v.length)
-    ) + 3;
-  const list = Object.keys(subcommands).reduce((p, key) => {
-    const str = `${rightPad(createCommandStr(command, key, subcommands[key].input), descPos)} ${subcommands[key].description || ''}`;
-    p.push(str);
+function createArgRow(argName, params) {
+  const first = '    ' + (params.aliase ? `-${params.aliase}, --${argName}` : `--${argName}`);
+  const second = params.description || '';
+  return [ first, second ];
+}
+
+function toTable(command, subcommands) {
+  return Object.keys(subcommands).reduce((p, key) => {
+    const subcommand = subcommands[key];
+    p.push([ `  ${createCommandStr(command, key, subcommand.input)}`, subcommand.description || '' ]);
+    Object.keys(subcommand.args).forEach(argName => {
+      p.push(createArgRow(argName, subcommand.args[argName]));
+    });
+    p.push([]); // empty line for separate bwtween subcommands
     return p;
-  }, [ 'Usage:' ]);
-  console.log(list);
-  return list.join('\n');
+  }, [
+    [ 'Usage:' ],
+    [ `  ${command} <SUBCOMMAND> <INPUT>` ],
+    [ '    -h, --help', 'Show list available subcommands and some concept guides.' ],
+    [],
+    [ 'Subcommands:' ]
+  ]);
+}
+
+function toStr(table) {
+  const leftSideLen = Math.max(...table.map(([ first, _second ]) => first ? first.length : 0)) + 1;
+  return table.map(([ first, second ]) => {
+    if (!first) {
+      return '';
+    }
+    return rightPad(first, leftSideLen) + (second || '');
+  }).join('\n');
+}
+
+function createUsage(command, subcommands) {
+  const list = toTable(command, subcommands);
+  return toStr(list);
 }
 
 function cli(settings) {
-  const m = meow(createUsageLite(settings.command, settings.subcommands));
-  m.showHelp();
+  const m = meow(createUsage(settings.command, settings.subcommands));
   console.log(m.input);
   console.log(m.flags);
+  m.showHelp();
 }
 
 module.exports = cli;
