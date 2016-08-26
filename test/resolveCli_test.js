@@ -2,7 +2,6 @@ const assert = require('power-assert');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const readYAML = require('../src/readYaml.js');
-const meow = require('meow');
 
 describe('resolveCli', () => {
   let resolveCli;
@@ -11,12 +10,6 @@ describe('resolveCli', () => {
   beforeEach(() => {
     resolveCli = proxyquire('../src/resolveCli.js', { meow: () => mockMeow });
     config = readYAML('test/hia.yaml');
-  });
-
-  afterEach(() => {
-    Object.keys(meow).forEach(key => {
-      meow[key].reset();
-    });
   });
 
   describe('show help', () => {

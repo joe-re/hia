@@ -11,7 +11,7 @@ function filterByPropertyName(params, propertyName) {
   }, {});
 }
 
-function reject(params, rejectKeys) {
+function rejectParams(params, rejectKeys) {
   return Object.keys(params).reduce((p, key) => {
     if (rejectKeys.includes(key)) {
       return p;
@@ -42,14 +42,25 @@ function createQuestionSchema(basedir, params) {
   }, {}) };
 };
 
-function argsResolve(basedir, receivedArgs, argParams) {
-  const questions = reject(filterByPropertyName(argParams, 'question'), Object.keys(receivedArgs));
+function questionParams(basedir, receivedArgs, argParams) {
+  const questions = rejectParams(filterByPropertyName(argParams, 'question'), Object.keys(receivedArgs));
+  if (Object.keys(questions).length === 0) {
+    return Promise.resolve({});
+  }
   const questionSchema = createQuestionSchema(basedir, questions);
-  prompt.start();
-  prompt.get(questionSchema, (err, result) => {
-    console.log(err);
-    console.log(result);
+  return new Promise((resolve, reject) => {
+    prompt.start();
+    prompt.get(questionSchema, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+    if (process.env.NODE_ENV === 'test') { // for handling test example
+      resolve();
+    }
   });
 }
 
-module.exports = argsResolve;
+module.exports = questionParams;

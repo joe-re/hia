@@ -4,7 +4,7 @@
   "description": "Easy to use generator system for creating template by cli.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/*test.js"
+    "test": "NODE_ENV=test mocha test/*test.js"
   },
   "keywords": [],
   "author": "",
