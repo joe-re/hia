@@ -4,12 +4,12 @@ const sinon = require('sinon');
 const readYAML = require('../src/readYaml.js');
 const meow = require('meow');
 
-describe('cli', () => {
-  let cli;
+describe('resolveCli', () => {
+  let resolveCli;
   let mockMeow;
   let config;
   beforeEach(() => {
-    cli = proxyquire('../src/cli.js', { meow: () => mockMeow });
+    resolveCli = proxyquire('../src/resolveCli.js', { meow: () => mockMeow });
     config = readYAML('test/hia.yaml');
   });
 
@@ -28,7 +28,7 @@ describe('cli', () => {
       };
     });
     it('shows help', () => {
-      cli(config);
+      resolveCli(config);
       assert(mockMeow.showHelp.calledOnce);
     });
   });
@@ -42,7 +42,7 @@ describe('cli', () => {
       };
     });
     it('shows help', () => {
-      cli(config);
+      resolveCli(config);
       assert(mockMeow.showHelp.calledOnce);
     });
   });
@@ -56,7 +56,7 @@ describe('cli', () => {
       };
     });
     it("doesn't shows help", () => {
-      cli(config);
+      resolveCli(config);
       assert.equal(mockMeow.showHelp.callCount, 0);
     });
   });

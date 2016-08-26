@@ -58,13 +58,19 @@ function needToShowHelp(config, m) {
   return m.flags.h || m.flags.help || !(Object.keys(config.subcommands).indexOf(m.input[0]) >= 0);
 }
 
-function cli(config) {
+function toCliParams(m) {
+  return {
+    subcommand: m.input[0]
+  };
+}
+
+function resolveCli(config) {
   const m = meow(createUsage(config.command, config.subcommands));
   if (needToShowHelp(config, m)) {
     m.showHelp();
     return;
   }
-  return m;
+  return toCliParams(m);
 }
 
-module.exports = cli;
+module.exports = resolveCli;
