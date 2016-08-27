@@ -1,11 +1,13 @@
 const assert = require('power-assert');
 const executeScript = require('../src/executeScript.js');
-const readYAML = require('../src/readYaml.js');
+const read = require('../src/readAndParseConfig.js');
 
 describe('executeScript', () => {
   let config;
   before(() => {
-    config = readYAML('test/hia.yaml');
+    return read('./test/hia.yaml').then(v => {
+      config = v;
+    });
   });
 
   it('receives exchanged options by script', () => {

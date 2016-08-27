@@ -31,6 +31,7 @@ function toTable(command, subcommands) {
     [ 'Usage:' ],
     [ `  ${command} <SUBCOMMAND> <INPUT>` ],
     [ '    -h, --help', 'Show list available subcommands and some concept guides.' ],
+    [ '    -c, --config', 'specify config file path.' ],
     [],
     [ 'Subcommands:' ]
   ]);
