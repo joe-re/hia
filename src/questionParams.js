@@ -1,15 +1,6 @@
 const prompt = require('prompt');
 const getScriptPath = require('./getScriptPath');
-
-function filterByPropertyName(params, propertyName) {
-  return Object.keys(params).reduce((p, key) => {
-    const param = params[key];
-    if (param[propertyName]) {
-      p[key] = param;
-    }
-    return p;
-  }, {});
-}
+const filterByProperty = require('./filterByProperty');
 
 function rejectParams(params, rejectKeys) {
   return Object.keys(params).reduce((p, key) => {
@@ -43,7 +34,7 @@ function createQuestionSchema(basedir, params) {
 };
 
 function questionParams(basedir, receivedArgs, argParams) {
-  const questions = rejectParams(filterByPropertyName(argParams, 'question'), Object.keys(receivedArgs));
+  const questions = rejectParams(filterByProperty(argParams, 'question', true), Object.keys(receivedArgs));
   if (Object.keys(questions).length === 0) {
     return Promise.resolve({});
   }
