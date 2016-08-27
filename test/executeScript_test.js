@@ -4,11 +4,9 @@ const read = require('../src/readAndParseConfig.js');
 
 describe('executeScript', () => {
   let config;
-  before(() => {
-    return read('./test/hia.yaml').then(v => {
-      config = v;
-    });
-  });
+  before(() => read('./test/hia.yaml').then(v => {
+    config = v;
+  }));
 
   it('receives exchanged options by script', () => {
     const result = executeScript(config, 'test:view', 'Test');

@@ -14,7 +14,6 @@ function getConfig(configFilePath) {
       exists = false;
     }
     if (exists) {
-      console.log(readAndParseConfig);
       return readAndParseConfig(filePath);
     }
   }

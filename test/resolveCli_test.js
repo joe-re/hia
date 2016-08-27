@@ -7,11 +7,13 @@ describe('resolveCli', () => {
   let resolveCli;
   let mockMeow;
   let config;
+
+  before(() => read('./test/hia.yaml').then(v => {
+    config = v;
+  }));
+
   beforeEach(() => {
     resolveCli = proxyquire('../src/resolveCli.js', { meow: () => mockMeow });
-    return read('./test/hia.yaml').then(v => {
-      config = v;
-    });
   });
 
   describe('show help', () => {
