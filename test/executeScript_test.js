@@ -4,13 +4,13 @@ const read = require('../src/readAndParseConfig.js');
 
 describe('executeScript', () => {
   let config;
-  before(() => read('./test/hia.yaml').then(v => {
-    config = v;
-  }));
+  before(() => {
+    config = read('./test/hia.yaml');
+  });
 
   it('receives exchanged options by script', () => {
-    const result = executeScript(config, 'test:view', 'Test');
-    assert.equal(result.output.dir, 'test/dist/exchanged');
-    assert.equal(result.args.name, 'TestExchanged');
+    const result = executeScript(config, { subcommand: 'test:view', input: 'Test' });
+    assert.equal(result.config.output.dir, 'test/dist/exchanged');
+    assert.equal(result.cli.input, 'TestExchanged');
   });
 });

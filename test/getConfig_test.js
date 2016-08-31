@@ -7,16 +7,16 @@ describe('getConfig', () => {
   describe('specify config file path', () => {
     describe('file is not found', () => {
       it('receives error', () => {
-        return getConfig('./config.yml').catch((error) => {
-          assert.equal(error, "ENOENT: no such file or directory, open './config.yml'");
+        assert.throws(getConfig.bind(null, './config.yml'), (error) => {
+          assert.equal(error.message, "ENOENT: no such file or directory, open './config.yml'");
+          return true;
         });
       });
     });
+
     describe('file is found', () => {
       it('receives config', () => {
-        return getConfig('./test/hia.yaml').then((config) => {
-          assert.equal(config.basedir, './test');
-        });
+        assert.equal(getConfig('./test/hia.yaml').basedir, './test');
       });
     });
   });
@@ -57,8 +57,10 @@ describe('getConfig', () => {
 
     describe("config file isn't.", () => {
       it('receives error', () => {
-        return getConfig().catch((error) => {
-          assert.equal(error, 'Please create hia.yaml or hia.json on your project root.');
+        assert.throws(getConfig.bind(null), (error) => {
+          console.log(error);
+          assert.equal(error.message, 'Please create hia.yaml or hia.json on your project root.');
+          return true;
         });
       });
     });

@@ -1,5 +1,5 @@
-module.exports = function script(options) {
-  options.output.dir += '/exchanged';
-  options.args.name += 'Exchanged';
-  return options;
+module.exports = function script(params) {
+  params.config.output.dir += '/exchanged';
+  params.cli.input += 'Exchanged';
+  return params;
 };

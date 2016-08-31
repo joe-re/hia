@@ -75,7 +75,7 @@ function toCliParams(config, m) {
 }
 
 function resolveCli(config) {
-  const m = meow(createUsage(config.command, config.subcommands));
+  const m = meow(createUsage(config.command, config.subcommands), { aliase: { h: 'help' } });
   if (needToShowHelp(config, m)) {
     m.showHelp();
     return;

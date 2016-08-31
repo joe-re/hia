@@ -8,9 +8,9 @@ describe('resolveCli', () => {
   let mockMeow;
   let config;
 
-  before(() => read('./test/hia.yaml').then(v => {
-    config = v;
-  }));
+  before(() => {
+    config = read('./test/hia.yaml');
+  });
 
   beforeEach(() => {
     resolveCli = proxyquire('../src/resolveCli.js', { meow: () => mockMeow });

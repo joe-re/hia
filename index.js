@@ -1,14 +1,23 @@
-const cli = require('./src/cli');
-const readYAML = require('./src/readYAML');
-const argsResolve = require('./src/argsResolve');
+const resolveCli = require('./src/resolveCli');
+const getConfig = require('./src/getConfig');
+const executeScript = require('./src/executeScript');
+
+function getArgFromCli(paramName) {
+  const index = process.argv.indexOf(paramName);
+  if (index < 0) {
+    return null;
+  }
+  return process.argv[index + 1];
+}
 
 function hia() {
-  const yaml = readYAML('./test/hia.yaml');
-  cli(yaml);
-  argsResolve(yaml.basedir, {}, yaml.subcommands['test:view'].args);
+  const configPath = getArgFromCli('-c') || getArgFromCli('--config');
+  const config = getConfig(configPath);
+  const cliParams = resolveCli(config);
+  // question
+  const result = executeScript(config, cliParams);
+  console.log(result);
 
-  // TODO: YAML or JSON Load
-  // TODO: script execute
   // TODO: load Template
   // TODO: render ejs
   // TODO: write Template

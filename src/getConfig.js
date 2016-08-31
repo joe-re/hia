@@ -17,7 +17,7 @@ function getConfig(configFilePath) {
       return readAndParseConfig(filePath);
     }
   }
-  return Promise.reject('Please create hia.yaml or hia.json on your project root.');
+  throw new Error('Please create hia.yaml or hia.json on your project root.');
 }
 
 module.exports = getConfig;
