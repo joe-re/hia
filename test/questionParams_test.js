@@ -1,12 +1,17 @@
 const assert = require('power-assert');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
+const read = require('../src/readAndParseConfig.js');
 
 describe('questionParams', () => {
   let prompt = null;
   let questionParams;
   let args = {};
-  let params = {};
+  let config;
+  before(() => {
+    config = read('./test/hia.yaml');
+  });
+
   beforeEach(() => {
     questionParams = proxyquire('../src/questionParams.js', { prompt });
   });
@@ -15,10 +20,9 @@ describe('questionParams', () => {
     describe("doesn't have received args of same name", () => {
       before(() => {
         prompt = { start: sinon.stub(), get: sinon.stub() };
-        params = { question_args: { aliase: 'q', description: 'question args.', question: true } };
       });
       it('is questioned', () => {
-        return questionParams('./test', args, params).then(() => {
+        return questionParams(config, { subcommand: 'test:view', args: {} }).then(() => {
           assert(prompt.start.calledOnce);
           assert(prompt.get.calledOnce);
         });
@@ -28,11 +32,10 @@ describe('questionParams', () => {
     describe('has received args of same name', () => {
       before(() => {
         prompt = { start: sinon.stub(), get: sinon.stub() };
-        params = { question_args: { aliase: 'q', description: 'question args.', question: true } };
         args = { question_args: 'already received' };
       });
       it("isn't questioned", () => {
-        return questionParams('./test', args, params).then(() => {
+        return questionParams(config, { subcommand: 'test:view', args }).then(() => {
           assert.equal(prompt.start.callCount, 0);
         });
       });

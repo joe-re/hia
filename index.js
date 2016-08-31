@@ -1,6 +1,7 @@
 const resolveCli = require('./src/resolveCli');
 const getConfig = require('./src/getConfig');
 const executeScript = require('./src/executeScript');
+const questionParams = require('./src/questionParams');
 
 function getArgFromCli(paramName) {
   const index = process.argv.indexOf(paramName);
@@ -14,9 +15,11 @@ function hia() {
   const configPath = getArgFromCli('-c') || getArgFromCli('--config');
   const config = getConfig(configPath);
   const cliParams = resolveCli(config);
-  // question
-  const result = executeScript(config, cliParams);
-  console.log(result);
+  questionParams(config, cliParams).then(args => {
+    cliParams.args = args;
+    const result = executeScript(config, cliParams);
+    console.log(result);
+  });
 
   // TODO: load Template
   // TODO: render ejs

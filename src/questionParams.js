@@ -33,19 +33,26 @@ function createQuestionSchema(basedir, params) {
   }, {}) };
 };
 
-function questionParams(basedir, receivedArgs, argParams) {
-  const questions = rejectParams(filterByProperty(argParams, 'question', true), Object.keys(receivedArgs));
+function questionParams(config, cliParams) {
+  const subcommandConfig = config.subcommands[cliParams.subcommand];
+  console.log(subcommandConfig.args);
+  console.log(cliParams.args);
+  const questions = rejectParams(
+    filterByProperty(subcommandConfig.args, 'question', true),
+    Object.keys(cliParams.args).filter(key => cliParams.args[key] !== null)
+  );
+  console.log(questions);
   if (Object.keys(questions).length === 0) {
-    return Promise.resolve({});
+    return Promise.resolve(cliParams.args);
   }
-  const questionSchema = createQuestionSchema(basedir, questions);
+  const questionSchema = createQuestionSchema(config.basedir, questions);
   return new Promise((resolve, reject) => {
     prompt.start();
     prompt.get(questionSchema, (err, result) => {
       if (err) {
         reject(err);
       } else {
-        resolve(result);
+        resolve(Object.assign({}, cliParams.args, result));
       }
     });
     if (process.env.NODE_ENV === 'test') { // for handling test example
