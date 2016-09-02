@@ -58,7 +58,6 @@ describe('getConfig', () => {
     describe("config file isn't.", () => {
       it('receives error', () => {
         assert.throws(getConfig.bind(null), (error) => {
-          console.log(error);
           assert.equal(error.message, 'Please create hia.yaml or hia.json on your project root.');
           return true;
         });

@@ -35,13 +35,10 @@ function createQuestionSchema(basedir, params) {
 
 function questionParams(config, cliParams) {
   const subcommandConfig = config.subcommands[cliParams.subcommand];
-  console.log(subcommandConfig.args);
-  console.log(cliParams.args);
   const questions = rejectParams(
     filterByProperty(subcommandConfig.args, 'question', true),
     Object.keys(cliParams.args).filter(key => cliParams.args[key] !== null)
   );
-  console.log(questions);
   if (Object.keys(questions).length === 0) {
     return Promise.resolve(cliParams.args);
   }

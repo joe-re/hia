@@ -16,7 +16,7 @@ export default class <%= name %> {
 describe('render', () => {
   describe('valid params', () => {
     it('can render ejs', () => {
-      const rendered = render(template, { name: 'Test' });
+      const rendered = render(template, { args: { name: 'Test' } });
       assert(rendered.match('<h1>(.*)</h1>')[1], 'Hello, Test Component!');
     });
   });
@@ -31,4 +31,3 @@ describe('render', () => {
     });
   });
 });
-

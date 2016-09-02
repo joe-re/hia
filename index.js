@@ -2,6 +2,8 @@ const resolveCli = require('./src/resolveCli');
 const getConfig = require('./src/getConfig');
 const executeScript = require('./src/executeScript');
 const questionParams = require('./src/questionParams');
+const readTemplate = require('./src/readTemplate');
+const reder = require('./src/render');
 
 function getArgFromCli(paramName) {
   const index = process.argv.indexOf(paramName);
@@ -18,7 +20,11 @@ function hia() {
   questionParams(config, cliParams).then(args => {
     cliParams.args = args;
     const result = executeScript(config, cliParams);
-    console.log(result);
+    console.log(result.config);
+    result.config.templates.forEach(path => {
+      const template = reder(readTemplate(config.basedir, path), result.cli);
+      console.log(template);
+    });
   });
 
   // TODO: load Template
