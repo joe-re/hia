@@ -47,7 +47,7 @@ describe('writeTemplate', () => {
     it('replaces [name] with filename.', () => {
       writeTemplate(template, 'fixtures/component.js', { dir: 'test/sandbox', filename: 'dist/[name].erb' });
       assert(mkdirp.calledOnce);
-      assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox');
+      assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox/dist');
       assert(writeFileSync.calledOnce);
       assert.equal(writeFileSync.getCall(0).args[0], 'test/sandbox/dist/component.erb');
       assert.equal(writeFileSync.getCall(0).args[1], template);

@@ -22,8 +22,9 @@ function hia() {
     cliParams.args = args;
     const result = executeScript(config, cliParams);
     result.config.templates.forEach(path => {
+      console.log(config.basedir);
       const template = reder(readTemplate(config.basedir, path), result.cli);
-      writeTemplate(template, path, result.config.output);
+      writeTemplate(template, path, result.config.output, config.basedir);
     });
   });
 }
