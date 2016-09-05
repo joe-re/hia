@@ -1,7 +1,7 @@
 const assert = require('power-assert');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
-const read = require('../src/readAndParseConfig.js');
+import Config from '../src/Config.js';
 
 describe('questionParams', () => {
   let prompt = null;
@@ -9,7 +9,7 @@ describe('questionParams', () => {
   let args = {};
   let config;
   before(() => {
-    config = read('./test/hia.yaml');
+    config = new Config('./test/hia.yaml').read();
   });
 
   beforeEach(() => {

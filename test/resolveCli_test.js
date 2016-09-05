@@ -1,7 +1,7 @@
 const assert = require('power-assert');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
-const read = require('../src/readAndParseConfig.js');
+import Config from '../src/Config.js';
 
 describe('resolveCli', () => {
   let resolveCli;
@@ -9,7 +9,7 @@ describe('resolveCli', () => {
   let config;
 
   before(() => {
-    config = read('./test/hia.yaml');
+    config = new Config('./test/hia.yaml').read();
   });
 
   beforeEach(() => {

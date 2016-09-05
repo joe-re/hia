@@ -1,5 +1,7 @@
+// @flow
+
+import Config from './Config';
 const resolveCli = require('./resolveCli');
-const getConfig = require('./getConfig');
 const executeScript = require('./executeScript');
 const questionParams = require('./questionParams');
 const readTemplate = require('./readTemplate');
@@ -16,7 +18,7 @@ function getArgFromCli(paramName) {
 
 function hia() {
   const configPath = getArgFromCli('-c') || getArgFromCli('--config');
-  const config = getConfig(configPath);
+  const config = new Config(configPath).read();
   const cliParams = resolveCli(config);
   questionParams(config, cliParams).then(args => {
     cliParams.args = args;
