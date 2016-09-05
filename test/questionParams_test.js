@@ -22,10 +22,9 @@ describe('questionParams', () => {
         prompt = { start: sinon.stub(), get: sinon.stub() };
       });
       it('is questioned', () => {
-        return questionParams(config, { subcommand: 'test:view', args: {} }).then(() => {
-          assert(prompt.start.calledOnce);
-          assert(prompt.get.calledOnce);
-        });
+        questionParams(config, { subcommand: 'test:view', args: {} });
+        assert(prompt.start.calledOnce);
+        assert(prompt.get.calledOnce);
       });
     });
 

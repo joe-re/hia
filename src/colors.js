@@ -1,3 +1,5 @@
+// @flow
+
 const colors = require('colors/safe');
 
 colors.setTheme({
@@ -6,4 +8,4 @@ colors.setTheme({
   error: 'red'
 });
 
-module.exports = colors;
+export default colors;

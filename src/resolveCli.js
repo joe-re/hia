@@ -1,4 +1,9 @@
-const meow = require('meow');
+// @flow
+
+import 'babel-polyfill';
+import Config from './Config';
+import meow from 'meow';
+import type { CliParams } from './types/CliParams';
 
 function rightPad(str, len) {
   let pad = '';
@@ -22,8 +27,8 @@ function toTable(command, subcommands) {
   return Object.keys(subcommands).reduce((p, key) => {
     const subcommand = subcommands[key];
     p.push([ `  ${createCommandStr(command, key, subcommand.input)}`, subcommand.description || '' ]);
-    Object.keys(subcommand.args).forEach(argName => {
-      p.push(createArgRow(argName, subcommand.args[argName]));
+    Object.keys(subcommand.args || {}).forEach(argName => {
+      p.push(createArgRow(argName, (subcommand.args || {})[argName]));
     });
     p.push([]); // empty line to separate bwtween subcommands
     return p;
@@ -67,18 +72,18 @@ function toCliParams(config, m) {
     p[argName] = argValue;
     return p;
   }, {});
-  const resolved = { subcommand: m.input[0], args };
+  const resolved = { subcommand: m.input[0], args, input: '' };
   if (subcommandConfig.input) {
     resolved.input = m.input[1];
   }
   return resolved;
 }
 
-function resolveCli(config) {
+function resolveCli(config: Config): ?CliParams {
   const m = meow(createUsage(config.command, config.subcommands), { aliase: { h: 'help' } });
   if (needToShowHelp(config, m)) {
     m.showHelp();
-    return;
+    return null;
   }
   return toCliParams(config, m);
 }

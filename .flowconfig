@@ -5,6 +5,8 @@
 [libs]
 
 [options]
+unsafe.enable_getters_and_setters=true
+module.ignore_non_literal_requires=true
 
 [version]
 0.32.0

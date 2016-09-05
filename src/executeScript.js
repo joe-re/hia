@@ -1,10 +1,14 @@
-const getScriptPath = require('./getScriptPath');
+// @flow
 
-function execute(config, cliParams) {
-  const subcommandConfig = config.subcommands[cliParams.subcommand];
-  const scriptPath = getScriptPath(config.basedir, subcommandConfig.script);
-  const script = require(scriptPath);
-  return script({ config: subcommandConfig, cli: cliParams });
+import getScriptPath from './getScriptPath';
+import Config from './Config';
+import type { CliParams } from './types/CliParams';
+
+function execute(config: Config, cliParams: CliParams) {
+  const subcommand = config.subcommands[cliParams.subcommand];
+  const scriptPath = getScriptPath(config.basedir, subcommand.script || '');
+  const script = scriptPath ? require(scriptPath): (val) => val;
+  return script({ subcommand, cliParams });
 };
 
 module.exports = execute;

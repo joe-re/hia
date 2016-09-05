@@ -1,6 +1,10 @@
-const prompt = require('prompt');
-const getScriptPath = require('./getScriptPath');
-const filterByProperty = require('./filterByProperty');
+// @flow
+
+import prompt from 'prompt';
+import getScriptPath from './getScriptPath';
+import filterByProperty from './filterByProperty';
+import Config from './Config';
+import type { CliParams } from './types/CliParams';
 
 function rejectParams(params, rejectKeys) {
   return Object.keys(params).reduce((p, key) => {
@@ -33,14 +37,14 @@ function createQuestionSchema(basedir, params) {
   }, {}) };
 };
 
-function questionParams(config, cliParams) {
-  const subcommandConfig = config.subcommands[cliParams.subcommand];
+function questionParams(config: Config, cliParam: CliParams) {
+  const subcommand = config.subcommands[cliParam.subcommand];
   const questions = rejectParams(
-    filterByProperty(subcommandConfig.args, 'question', true),
-    Object.keys(cliParams.args).filter(key => cliParams.args[key] !== null)
+    filterByProperty(subcommand.args || {}, 'question', true),
+    Object.keys(cliParam.args).filter(key => cliParam.args[key] !== null)
   );
   if (Object.keys(questions).length === 0) {
-    return Promise.resolve(cliParams.args);
+    return Promise.resolve(cliParam.args);
   }
   const questionSchema = createQuestionSchema(config.basedir, questions);
   return new Promise((resolve, reject) => {
@@ -49,12 +53,9 @@ function questionParams(config, cliParams) {
       if (err) {
         reject(err);
       } else {
-        resolve(Object.assign({}, cliParams.args, result));
+        resolve(Object.assign({}, cliParam.args, result));
       }
     });
-    if (process.env.NODE_ENV === 'test') { // for handling test example
-      resolve();
-    }
   });
 }
 

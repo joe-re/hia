@@ -3,12 +3,37 @@
 import fs from 'fs';
 import jsyaml from 'js-yaml';
 
+type Subcommand = {
+  description?: string,
+  input?: boolean,
+  templates?: Array<string>,
+  script?: string,
+  output?: { dir: string, filename: string },
+  args?: { [key: string]: {
+    aliase?: string,
+    description?: string,
+    default?: string
+  }}
+};
+
 export default class Config {
   configFilePath: string;
   _config: Object;
 
   constructor(configFilePath: ?string) {
     this.configFilePath = configFilePath || '';
+  }
+
+  get basedir(): string {
+    return this._config['basedir'] || './';
+  }
+
+  get command(): string {
+    return this._config['command'] || '';
+  }
+
+  get subcommands(): { [key: string]: Subcommand } {
+    return this._config['subcommands'] || {};
   }
 
   read() {

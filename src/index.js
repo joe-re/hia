@@ -1,5 +1,4 @@
 // @flow
-
 import Config from './Config';
 const resolveCli = require('./resolveCli');
 const executeScript = require('./executeScript');
@@ -16,21 +15,23 @@ function getArgFromCli(paramName) {
   return process.argv[index + 1];
 }
 
-function hia() {
+export default async function hia() {
   const configPath = getArgFromCli('-c') || getArgFromCli('--config');
-  const config = new Config(configPath).read();
-  const cliParams = resolveCli(config);
-  questionParams(config, cliParams).then(args => {
-    cliParams.args = args;
-    const result = executeScript(config, cliParams);
-    result.config.templates.forEach(path => {
-      console.log(config.basedir);
-      const template = reder(readTemplate(config.basedir, path), result.cli);
-      writeTemplate(template, path, result.config.output, config.basedir);
-    });
+  const config = new Config(configPath);
+  config.read();
+  let cliParams = resolveCli(config);
+  if (!cliParams) {
+    return;
+  }
+  cliParams.args = await questionParams(config, cliParams);
+  const result = executeScript(config, cliParams);
+  const { subcommand } = result;
+  cliParams = result.cliParams;
+  if (!subcommand.templates) {
+    return;
+  }
+  subcommand.templates.forEach(path => {
+    const template = reder(readTemplate(config.basedir, path), cliParams);
+    writeTemplate(template, path, subcommand.output, config.basedir);
   });
 }
-
-hia();
-
-module.exports = hia;

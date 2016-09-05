@@ -1,5 +1,5 @@
-const filterByProperty = require('./filterByProperty');
-const colors = require('./colors');
+import filterByProperty from './filterByProperty';
+import colors from './colors';
 
 function validateRequired(args, argParams) {
   const requiredParams = filterByProperty(argParams, 'required', true);
