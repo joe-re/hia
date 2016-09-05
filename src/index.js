@@ -1,10 +1,10 @@
-const resolveCli = require('./src/resolveCli');
-const getConfig = require('./src/getConfig');
-const executeScript = require('./src/executeScript');
-const questionParams = require('./src/questionParams');
-const readTemplate = require('./src/readTemplate');
-const reder = require('./src/render');
-const writeTemplate = require('./src/writeTemplate');
+const resolveCli = require('./resolveCli');
+const getConfig = require('./getConfig');
+const executeScript = require('./executeScript');
+const questionParams = require('./questionParams');
+const readTemplate = require('./readTemplate');
+const reder = require('./render');
+const writeTemplate = require('./writeTemplate');
 
 function getArgFromCli(paramName) {
   const index = process.argv.indexOf(paramName);
