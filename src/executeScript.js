@@ -6,7 +6,7 @@ import type { CliParams } from './types/CliParams';
 
 function execute(config: Config, cliParams: CliParams) {
   const subcommand = config.subcommands[cliParams.subcommand];
-  const scriptPath = getScriptPath(config.basedir, subcommand.script || '');
+  const scriptPath = subcommand.script ? getScriptPath(config.basedir, subcommand.script) : '';
   const script = scriptPath ? require(scriptPath): (val) => val;
   return script({ subcommand, cliParams });
 };

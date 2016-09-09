@@ -66,7 +66,7 @@ function needToShowHelp(config, m) {
 
 function toCliParams(config, m) {
   const subcommandConfig = config.subcommands[m.input[0]];
-  const args = Object.keys(subcommandConfig.args).reduce((p, argName) => {
+  const args = Object.keys(subcommandConfig.args || {}).reduce((p, argName) => {
     const argParams = subcommandConfig.args[argName];
     const argValue = m.flags[argName] || m.flags[argParams.aliase] || null;
     p[argName] = argValue;
