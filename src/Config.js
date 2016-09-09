@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import jsyaml from 'js-yaml';
+import path from 'path';
 
 export type Template = {
   name?: string,
@@ -36,6 +37,10 @@ export default class Config {
 
   get basedir(): string {
     return this._config['basedir'] || './';
+  }
+
+  set basedir(dir: string) {
+    this._config['basedir'] = path.isAbsolute(dir) ? path.relative(process.cwd(), dir) : dir;
   }
 
   get command(): string {

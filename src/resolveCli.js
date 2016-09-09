@@ -1,6 +1,5 @@
 // @flow
 
-import 'babel-polyfill';
 import Config from './Config';
 import meow from 'meow';
 import type { CliParams } from './types/CliParams';
@@ -23,7 +22,17 @@ function createArgRow(argName, params) {
   return [ first, second ];
 }
 
-function toTable(command, subcommands) {
+function toTable(command, subcommands, receiveConfig) {
+  const table = [
+    [ 'Usage:' ],
+    [ `  ${command} <SUBCOMMAND> <INPUT>` ],
+    [ '    -h, --help', 'Show list available subcommands and some concept guides.' ],
+  ];
+  if (!receiveConfig) {
+    table.push([ '    -c, --config', 'specify config file path.' ]);
+  }
+  table.push([]);
+  table.push([ 'Subcommands:' ]);
   return Object.keys(subcommands).reduce((p, key) => {
     const subcommand = subcommands[key];
     p.push([ `  ${createCommandStr(command, key, subcommand.input)}`, subcommand.description || '' ]);
@@ -32,14 +41,7 @@ function toTable(command, subcommands) {
     });
     p.push([]); // empty line to separate bwtween subcommands
     return p;
-  }, [
-    [ 'Usage:' ],
-    [ `  ${command} <SUBCOMMAND> <INPUT>` ],
-    [ '    -h, --help', 'Show list available subcommands and some concept guides.' ],
-    [ '    -c, --config', 'specify config file path.' ],
-    [],
-    [ 'Subcommands:' ]
-  ]);
+  }, table);
 }
 
 function toStr(table) {
@@ -52,8 +54,8 @@ function toStr(table) {
   }).join('\n');
 }
 
-function createUsage(command, subcommands) {
-  const list = toTable(command, subcommands);
+function createUsage(command, subcommands, receiveConfig) {
+  const list = toTable(command, subcommands, receiveConfig);
   return toStr(list);
 }
 
@@ -79,8 +81,8 @@ function toCliParams(config, m) {
   return resolved;
 }
 
-function resolveCli(config: Config): ?CliParams {
-  const m = meow(createUsage(config.command, config.subcommands), { aliase: { h: 'help' } });
+function resolveCli(config: Config, receiveConfig: boolean): ?CliParams {
+  const m = meow(createUsage(config.command, config.subcommands, receiveConfig), { aliase: { h: 'help' } });
   if (needToShowHelp(config, m)) {
     m.showHelp();
     return null;

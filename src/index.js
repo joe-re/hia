@@ -1,12 +1,14 @@
 // @flow
 import Config from './Config';
-const resolveCli = require('./resolveCli');
-const executeScript = require('./executeScript');
-const questionParams = require('./questionParams');
-const readTemplate = require('./readTemplate');
-const reder = require('./render');
-const writeTemplate = require('./writeTemplate');
+import resolveCli from './resolveCli';
+import executeScript from './executeScript';
+import questionParams from './questionParams';
+import readTemplate from './readTemplate';
+import reder from './render';
+import writeTemplate from './writeTemplate';
+import colors from './colors';
 
+type Params = { basedir?: string, configPath?: string };
 function getArgFromCli(paramName) {
   const index = process.argv.indexOf(paramName);
   if (index < 0) {
@@ -15,15 +17,19 @@ function getArgFromCli(paramName) {
   return process.argv[index + 1];
 }
 
-export default async function hia() {
-  const configPath = getArgFromCli('-c') || getArgFromCli('--config');
+async function hia(params: Params) {
+  let receiveConfig = !!params.configPath;
+  const configPath = params.configPath || getArgFromCli('-c') || getArgFromCli('--config');
   const config = new Config(configPath);
   config.read();
-  let cliParams = resolveCli(config);
+  let cliParams = resolveCli(config, receiveConfig);
   if (!cliParams) {
     return;
   }
   cliParams.args = await questionParams(config, cliParams);
+  if (params.basedir) {
+    config.basedir = params.basedir;
+  }
   const result = executeScript(config, cliParams);
   const { subcommand } = result;
   cliParams = result.cliParams;
@@ -34,4 +40,8 @@ export default async function hia() {
     const content = reder(readTemplate(config.basedir, template.src), cliParams);
     writeTemplate(content, template, subcommand.output, config.basedir);
   });
+}
+
+export default function(params: Params) {
+  hia(params).catch(e => console.log(colors.error(e)));
 }
