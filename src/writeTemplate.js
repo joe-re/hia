@@ -8,11 +8,9 @@ import path from 'path';
 import type { Template, Output } from './Config';
 
 function createOutputFilePath(template, output, basedir) {
-  let name = template.name || path.parse(template.src).name;
+  let name = template.name || path.parse(template.src).base;
   if (output && output.filename) {
     name = output.filename.replace('[name]', name);
-  } else {
-    name += path.parse(template.src).ext;
   }
   const file = (output && output.dir) ? `${output.dir}/${name}` : name;
   const outputPath = path.relative(process.cwd(), getScriptPath(basedir, file));
