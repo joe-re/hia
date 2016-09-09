@@ -30,8 +30,8 @@ export default async function hia() {
   if (!subcommand.templates) {
     return;
   }
-  subcommand.templates.forEach(path => {
-    const template = reder(readTemplate(config.basedir, path), cliParams);
-    writeTemplate(template, path, subcommand.output, config.basedir);
+  subcommand.templates.forEach(template => {
+    const content = reder(readTemplate(config.basedir, template.src), cliParams);
+    writeTemplate(content, template, subcommand.output, config.basedir);
   });
 }

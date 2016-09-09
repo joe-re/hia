@@ -1,0 +1,4 @@
+// @flow
+declare module ejs {
+  declare function render(content: string, params: Object): string;
+};

@@ -23,7 +23,7 @@ describe('writeTemplate', () => {
 
   describe('specify output.name', () => {
     it('uses output.name for output filename.', () => {
-      writeTemplate(template, 'fixtures/component.js', { dir: 'test/sandbox', filename: 'SampleFile.js' });
+      writeTemplate(template, { src: 'fixtures/component.js' }, { dir: 'test/sandbox', filename: 'SampleFile.js' });
       assert(mkdirp.calledOnce);
       assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox');
       assert(writeFileSync.calledOnce);
@@ -34,7 +34,7 @@ describe('writeTemplate', () => {
 
   describe("doesn't specify output.name", () => {
     it('uses template name for output filename.', () => {
-      writeTemplate(template, 'fixtures/component.js', { dir: 'test/sandbox' });
+      writeTemplate(template, { src: 'fixtures/component.js' }, { dir: 'test/sandbox' });
       assert(mkdirp.calledOnce);
       assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox');
       assert(writeFileSync.calledOnce);
@@ -45,11 +45,28 @@ describe('writeTemplate', () => {
 
   describe('include [name]', () => {
     it('replaces [name] with filename.', () => {
-      writeTemplate(template, 'fixtures/component.js', { dir: 'test/sandbox', filename: 'dist/[name].erb' });
+      writeTemplate(template, { src: 'fixtures/component.js' }, { dir: 'test/sandbox', filename: 'dist/[name].erb' });
       assert(mkdirp.calledOnce);
       assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox/dist');
       assert(writeFileSync.calledOnce);
       assert.equal(writeFileSync.getCall(0).args[0], 'test/sandbox/dist/component.erb');
+      assert.equal(writeFileSync.getCall(0).args[1], template);
+    });
+  });
+
+  describe('specify entry', () => {
+    it('apply entry path', () => {
+      writeTemplate(template, {
+        name: 'component/test_component.html',
+        src: 'fixtures/component.js'
+      }, {
+        dir: 'test/sandbox',
+        filename: 'dist/[name]'
+      });
+      assert(mkdirp.calledOnce);
+      assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox/dist/component');
+      assert(writeFileSync.calledOnce);
+      assert.equal(writeFileSync.getCall(0).args[0], 'test/sandbox/dist/component/test_component.html');
       assert.equal(writeFileSync.getCall(0).args[1], template);
     });
   });

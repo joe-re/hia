@@ -3,12 +3,22 @@
 import fs from 'fs';
 import jsyaml from 'js-yaml';
 
+export type Template = {
+  name?: string,
+  src: string
+}
+
+export type Output = {
+  dir?: string,
+  filename?: string
+}
+
 type Subcommand = {
   description?: string,
   input?: boolean,
-  templates?: Array<string>,
+  templates?: Array<Template>,
   script?: string,
-  output?: { dir: string, filename: string },
+  output?: Output,
   args?: { [key: string]: {
     aliase?: string,
     description?: string,
