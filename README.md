@@ -70,7 +70,7 @@ export default <%= input %> extends React.Component {
 ### 3. Execute command
 
 ```sh
-$ hia component -t 'Test Text!'
+$ hia component Test -t 'Test Text!'
 ```
 
 Then, created src/component/Hello.jsx on your project root.

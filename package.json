@@ -4,6 +4,10 @@
   "description": "Easy and customizable generator system for creating template.",
   "bin": { "hia": "bin/hia.js" },
   "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joe-re/hia.git"
+  },
   "scripts": {
     "publish": "npm run build",
     "build": "babel -d dist src",
