@@ -1,15 +1,17 @@
 {
   "name": "hia",
   "version": "0.0.1",
-  "description": "Easy to use generator system for creating template by cli.",
+  "description": "Easy and customizable generator system for creating template.",
+  "bin": { "hia": "bin/hia.js" },
   "main": "dist/index.js",
   "scripts": {
+    "publish": "npm run build",
     "build": "babel -d dist src",
     "watch": "babel -w -d dist src",
     "test": "NODE_ENV=test mocha --compilers js:babel-register test/*test.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["generator"],
+  "author": "joe-re",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.14.0",

@@ -43,5 +43,5 @@ async function hia(params: Params) {
 }
 
 export default function(params: Params) {
-  hia(params).catch(e => console.log(colors.error(e)));
+  hia(params || {}).catch(e => console.log(colors.error(e.stack)));
 }
