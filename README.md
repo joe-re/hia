@@ -36,7 +36,7 @@ subcommands:
     description: generate view template.
     input: true
     templates:
-      - name: component/Hello.jsx
+      - name: component/[input]Component.jsx
         src: templates/component.ejs
     output:
       dir: src
@@ -73,9 +73,9 @@ export default <%= input %> extends React.Component {
 $ hia component Test -t 'Test Text!'
 ```
 
-Then, created src/component/Hello.jsx on your project root.
+Then, created src/component/TestComponent.jsx on your project root.
 
-src/component/Hello.jsx
+src/component/TestComponent.jsx
 
 ```javscript
 import React from 'react';
@@ -188,7 +188,7 @@ Default: false
 - templates: Array<{ src: string, name: string }>
 
 src: template src of ejs.
-name(optional): output src file path based on setting of basedir.
+name(optional): output src file path based on setting of basedir. [input] or other arg name are replaced by the name of the chunk.
 
 ##### script
 

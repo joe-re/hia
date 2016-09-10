@@ -7,8 +7,11 @@ import getScriptPath from './getScriptPath';
 import path from 'path';
 import type { Template, Output } from './Config';
 
-function createOutputFilePath(template, output, basedir) {
+function createOutputFilePath(template, output, basedir, args={}) {
   let name = template.name || path.parse(template.src).base;
+  Object.keys(args).forEach(key => {
+    name = name.replace(`[${key}]`, args[key]);
+  });
   if (output && output.filename) {
     name = output.filename.replace('[name]', name);
   }
@@ -17,10 +20,18 @@ function createOutputFilePath(template, output, basedir) {
   return outputPath;
 }
 
-function writeTemplate(content: string, template: Template, output?: Output, basedir: string) {
-  const outputPath = createOutputFilePath(template, output, basedir);
+type Params = {
+  content: string,
+  template: Template,
+  output?: Output,
+  basedir: string,
+  args?: { [key: string] : string }
+};
+
+function writeTemplate(params: Params) {
+  const outputPath = createOutputFilePath(params.template, params.output, params.basedir, params.args);
   mkdirp.sync(path.parse(outputPath).dir);
-  fs.writeFileSync(outputPath, content);
+  fs.writeFileSync(outputPath, params.content);
   console.log(colors.success(`created ${outputPath}`));
 }
 

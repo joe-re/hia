@@ -35,12 +35,20 @@ async function hia(params: Params) {
   const { subcommand } = result;
   cliParams = result.cliParams;
   validateArgs(cliParams.args, subcommand.args || {});
-  if (!subcommand.templates) {
+  if (!subcommand.templates || !cliParams) {
     return;
   }
   subcommand.templates.forEach(template => {
-    const content = reder(readTemplate(config.basedir, template.src), cliParams);
-    writeTemplate(content, template, subcommand.output, config.basedir);
+    if (cliParams) {
+      const content = reder(readTemplate(config.basedir, template.src), cliParams);
+      writeTemplate({
+        content,
+        template,
+        output: subcommand.output,
+        basedir: config.basedir,
+        args: Object.assign({}, cliParams.args, { input: cliParams.input })
+      });
+    }
   });
 }
 

@@ -23,7 +23,11 @@ describe('writeTemplate', () => {
 
   describe('specify output.name', () => {
     it('uses output.name for output filename.', () => {
-      writeTemplate(template, { src: 'fixtures/component.js' }, { dir: 'test/sandbox', filename: 'SampleFile.js' });
+      writeTemplate({
+        content: template,
+        template: { src: 'fixtures/component.js' },
+        output: { dir: 'test/sandbox', filename: 'SampleFile.js' }
+      });
       assert(mkdirp.calledOnce);
       assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox');
       assert(writeFileSync.calledOnce);
@@ -34,7 +38,11 @@ describe('writeTemplate', () => {
 
   describe("doesn't specify output.name", () => {
     it('uses template name for output filename.', () => {
-      writeTemplate(template, { src: 'fixtures/component.js' }, { dir: 'test/sandbox' });
+      writeTemplate({
+        content: template,
+        template: { src: 'fixtures/component.js' },
+        output: { dir: 'test/sandbox' }
+      });
       assert(mkdirp.calledOnce);
       assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox');
       assert(writeFileSync.calledOnce);
@@ -43,9 +51,28 @@ describe('writeTemplate', () => {
     });
   });
 
+  describe('template.name include [argname]', () => {
+    it('replaces [argname] with filename.', () => {
+      writeTemplate({
+        content: template,
+        template: { src: 'fixtures/component.js' },
+        output: { dir: 'test/sandbox', filename: 'dist/[name]' }
+      });
+      assert(mkdirp.calledOnce);
+      assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox/dist');
+      assert(writeFileSync.calledOnce);
+      assert.equal(writeFileSync.getCall(0).args[0], 'test/sandbox/dist/component.js');
+      assert.equal(writeFileSync.getCall(0).args[1], template);
+    });
+  });
+
   describe('include [name]', () => {
     it('replaces [name] with filename.', () => {
-      writeTemplate(template, { src: 'fixtures/component.js' }, { dir: 'test/sandbox', filename: 'dist/[name]' });
+      writeTemplate({
+        content: template,
+        template: { src: 'fixtures/component.js' },
+        output: { dir: 'test/sandbox', filename: 'dist/[name]' }
+      });
       assert(mkdirp.calledOnce);
       assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox/dist');
       assert(writeFileSync.calledOnce);
@@ -56,12 +83,10 @@ describe('writeTemplate', () => {
 
   describe('specify entry', () => {
     it('apply entry path', () => {
-      writeTemplate(template, {
-        name: 'component/test_component.html',
-        src: 'fixtures/component.js'
-      }, {
-        dir: 'test/sandbox',
-        filename: 'dist/[name]'
+      writeTemplate({
+        content: template,
+        template: { name: 'component/test_component.html', src: 'fixtures/component.js' },
+        output: { dir: 'test/sandbox', filename: 'dist/[name]' }
       });
       assert(mkdirp.calledOnce);
       assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox/dist/component');
@@ -70,4 +95,24 @@ describe('writeTemplate', () => {
       assert.equal(writeFileSync.getCall(0).args[1], template);
     });
   });
+
+  describe('template.name include [argname]', () => {
+    it('replaces [argname] with filename.', () => {
+      writeTemplate({
+        content: template,
+        template: {
+          name: 'component/[input]_component.html',
+          src: 'fixtures/component.js'
+        },
+        output: { dir: 'test/sandbox', filename: 'dist/[name]' },
+        args: { input: 'test' }
+      });
+      assert(mkdirp.calledOnce);
+      assert.equal(mkdirp.getCall(0).args[0], 'test/sandbox/dist/component');
+      assert(writeFileSync.calledOnce);
+      assert.equal(writeFileSync.getCall(0).args[0], 'test/sandbox/dist/component/test_component.html');
+      assert.equal(writeFileSync.getCall(0).args[1], template);
+    });
+  });
+
 });
