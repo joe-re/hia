@@ -1,5 +1,7 @@
+// @flow
 import filterByProperty from './filterByProperty';
 import colors from './colors';
+import type { Args } from './Config';
 
 function validateRequired(args, argParams) {
   const requiredParams = filterByProperty(argParams, 'required', true);
@@ -15,7 +17,7 @@ function validateRequired(args, argParams) {
   return true;
 }
 
-function validateArgs(args, argParams) {
+function validateArgs(args: {[key:string]: any}, argParams: Args) {
   return validateRequired(args, argParams);
 }
 

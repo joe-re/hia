@@ -14,17 +14,21 @@ export type Output = {
   filename?: string
 }
 
+export type Args = {
+  [key: string]: {
+    aliase?: string,
+    description?: string,
+    default?: string
+  }
+};
+
 type Subcommand = {
   description?: string,
   input?: boolean,
   templates?: Array<Template>,
   script?: string,
   output?: Output,
-  args?: { [key: string]: {
-    aliase?: string,
-    description?: string,
-    default?: string
-  }}
+  args?: Args
 };
 
 export default class Config {

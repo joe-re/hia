@@ -7,6 +7,7 @@ import readTemplate from './readTemplate';
 import reder from './render';
 import writeTemplate from './writeTemplate';
 import colors from './colors';
+import validateArgs from './validateArgs';
 
 type Params = { basedir?: string, configPath?: string };
 function getArgFromCli(paramName) {
@@ -33,6 +34,7 @@ async function hia(params: Params) {
   const result = executeScript(config, cliParams);
   const { subcommand } = result;
   cliParams = result.cliParams;
+  validateArgs(cliParams.args, subcommand.args || {});
   if (!subcommand.templates) {
     return;
   }
