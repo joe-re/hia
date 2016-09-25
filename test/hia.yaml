@@ -7,7 +7,7 @@ subcommands:
     description: generate view template.
     input: true
     templates:
-      src: fixtures/component.ejs
+      - src: fixtures/component.ejs
     script:
       fixtures/scripts/test.js
     output:

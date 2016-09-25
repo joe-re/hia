@@ -8,6 +8,7 @@ import reder from './render';
 import writeTemplate from './writeTemplate';
 import colors from './colors';
 import validateArgs from './validateArgs';
+import validateInput from './validateInput';
 
 type Params = { basedir?: string, configPath?: string };
 function getArgFromCli(paramName) {
@@ -34,7 +35,10 @@ async function hia(params: Params) {
   const result = executeScript(config, cliParams);
   const { subcommand } = result;
   cliParams = result.cliParams;
-  validateArgs(cliParams.args, subcommand.args || {});
+  if (!validateArgs(cliParams.args, subcommand.args || {}) ||
+    !validateInput(cliParams.input || '', !!subcommand.input)) {
+    return;
+  }
   if (!subcommand.templates || !cliParams) {
     return;
   }
@@ -45,7 +49,7 @@ async function hia(params: Params) {
         content,
         template,
         output: subcommand.output,
-        args: Object.assign({}, cliParams.args, { input: cliParams.input })
+        args: Object.assign({}, cliParams.args, { input: cliParams.input || '' })
       });
     }
   });
