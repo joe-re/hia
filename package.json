@@ -1,6 +1,6 @@
 {
   "name": "hia",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Easy and customizable generator system for creating template.",
   "bin": { "hia": "bin/hia.js" },
   "main": "dist/index.js",

@@ -45,7 +45,6 @@ async function hia(params: Params) {
         content,
         template,
         output: subcommand.output,
-        basedir: config.basedir,
         args: Object.assign({}, cliParams.args, { input: cliParams.input })
       });
     }
