@@ -30,7 +30,6 @@ Example:
 ```yaml
 ---
 
-command: hia
 subcommands:
   component:
     description: generate view template.
@@ -142,6 +141,11 @@ Default: process.cwd()
 - command: string
 
 Your generator system's command name.
+Don't need specify it if run local hia on your system.
+If you create your generator system using hia, it is required.
+
+example
+https://github.com/joe-re/hia-react-fluxutil
 
 ### subcommands
 
@@ -153,7 +157,7 @@ subcommandName become subcommand for cli.
 
 Example:
 ```yaml
-command: hia
+command: hia-example
 subcommands:
   view:
     description: generate view template.
